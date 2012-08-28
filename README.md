@@ -4,13 +4,8 @@ ARC GNU Tool Chain
 This is the main git repository for the ARC GNU tool chain. It contains just
 the scripts required to build the entire tool chain.
 
-This is the version for the 4.4 tool chain release development branches. It
-contains various patches applied since the official tool chain release. The
-tool chain should still be reliable, but has not been through full release
-testing.
-
-The build script will check out the development branches from the 4.4 tool
-chain component repositories.
+This is the master from which versions of the scripts for different releases
+are branched.
 
 Prequisites
 -----------
