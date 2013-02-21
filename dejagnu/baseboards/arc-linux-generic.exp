@@ -47,8 +47,9 @@ search_and_load_file "library file" "gdb-extra.exp" ${boards_dir}
 # No multilib options needed by default.
 process_multilib_options ""
 
-# Specify the compilers to use.
-set_board_info compiler [find_gcc]
+# Specify the compilers to use. Custom for this GDB testing
+# set_board_info compiler [find_gcc]
+set_board_info compiler arc-linux-uclibc-gcc
 
 # Set up connection using telnet and FTP. Hostname, prompts, usernames and
 # passwords are in the board specific files.

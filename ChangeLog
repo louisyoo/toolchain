@@ -1,5 +1,10 @@
 2013-02-21  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
+	* dejagnu/baseboards/arc-linux-generic.exp: Explicitly select the
+	installed compiler.
+
+2013-02-21  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
 	* dejagnu/baseboards/arc-linux-generic.exp: Move extra file loads
 	to after the main config file is loaded. Add gdb-extra.exp. Mark
 	as using GDB stub.
