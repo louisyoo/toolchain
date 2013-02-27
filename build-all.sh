@@ -406,7 +406,7 @@ fi
 PARALLEL="-j ${jobs} -l ${load}"
 
 # All the things we export to the scripts
-export UNISRC=unisrc-4.8
+export UNISRC=unisrc-4.4-gdb-7.5
 export ARC_GNU
 export LINUXDIR
 export INSTALLDIR

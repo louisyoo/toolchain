@@ -1,5 +1,9 @@
 2013-02-27  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
+	* build-all.sh (UNISRC): Updated.
+
+2013-02-27  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
 	* arc-versions.sh: Build with 4.4 components apart from GDB.
 	* build-elf32.sh: Build with 4.4 components and no GDB.
 	* build-linux.sh: Build with 4.4 tool chain.
