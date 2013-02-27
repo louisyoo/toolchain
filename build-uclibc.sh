@@ -75,9 +75,9 @@
 # tricky under MinGW/MSYS environments).
 
 # The script constructs a unified source directory (if --force is specified)
-# and uses a build directory (bd-4.8-uclibc) local to the directory in which
-# it is executed. The script generates a date and time stamped log file in
-# that directory.
+# and uses build directories (bd-4.4-uclibc and bd-4.8-uclibc-gdb) local to
+# the directory in which it is executed. The script generates a date and time
+# stamped log file in that directory.
 
 # This approach is based on Mike Frysinger's guidelines on building a
 # cross-compiler.
@@ -114,7 +114,8 @@
 # 5. Build & install the whole tool chain from scratch (including GCC stage 2)
 #    using the temporary headers
 
-# We build GDB after GCC. gdbserver also has to be built and installed
+# At present the GDB binutils libraries are out of step, so GDB has to be
+# built separately. gdbserver also has to be built and installed
 # separately. So we add two extra steps
 
 # 6. Build & install GDB
@@ -132,8 +133,8 @@ fi
 
 arch=arc
 unified_src_abs="$(echo "${PWD}")"/${UNISRC}
-build_dir="$(echo "${PWD}")"/bd-4.8-uclibc
-
+build_dir="$(echo "${PWD}")"/bd-4.4-uclibc
+build_dir_gdb="$(echo "${PWD}")"/bd-4.8-uclibc-gdb
 version_str="ARCompact Linux uClibc toolchain (built $(date +%Y%m%d))"
 bugurl_str="http://solvnet.synopsys.com"
 
@@ -148,7 +149,7 @@ until
 opt=$1
 case ${opt} in
     --force)
-	rm -rf ${build_dir}
+	rm -rf ${build_dir} ${build_dir_gdb}
 	;;
     ?*)
 	echo "Usage: ./build-uclibc.sh [--force]"
@@ -173,6 +174,7 @@ echo "START ${ARC_ENDIAN}-endian uClibc: $(date)"
 . "${ARC_GNU}"/toolchain/arc-init.sh
 uclibc_build_dir="$(echo "${PWD}")"/uClibc
 linux_build_dir="$(echo "${PWD}")"/linux
+gdb_dir="${ARC_GNU}/gdb"
 
 # Note stuff for the log
 echo "Installing in ${INSTALLDIR}" >> ${logfile} 2>&1
@@ -428,14 +430,35 @@ fi
 export PATH=${INSTALLDIR}/bin:$PATH
 
 # -----------------------------------------------------------------------------
-# Build and install GDB
+# Build and install GDB separately. We need to do this, because its binutils
+# libraries are not compatible. No simulator build for Linux
 echo "Building GDB" >> "${logfile}"
 echo "============" >> "${logfile}"
 
 echo "Start building GDB ..."
 
-# Create the build dir, then build and install
-cd "${build_dir}"
+# Create the build dir
+rm -rf "${build_dir_gdb}"
+mkdir -p "${build_dir_gdb}"
+cd "${build_dir_gdb}"
+
+# Configure the build. This time we allow things, and use the headers from the
+# stage 1 build. We still have to disable libgomp
+config_path=$(calcConfigPath "${gdb_dir}")
+if "${config_path}"/configure --target=${arche}-linux-uclibc --with-cpu=arc700 \
+        --disable-werror ${DISABLE_MULTILIB} \
+        --with-pkgversion="${version_str}"\
+        --with-bugurl="${bugurl_str}" \
+        --enable-fast-install=N/A  --with-endian=${ARC_ENDIAN} \
+        --prefix="${INSTALLDIR}" \
+    >> "${logfile}" 2>&1
+then
+    echo "  finished configuring GDB"
+else
+    echo "ERROR: GDB configure failed. Please see"
+    echo "       \"${logfile}\" for details."
+    exit 1
+fi
 
 if make ${PARALLEL} all-gdb >> "${logfile}" 2>&1
 then
@@ -463,14 +486,14 @@ echo "===================================" >> "${logfile}"
 
 echo "Start building GDBSERVER to run on an ARC ..."
 
-rm -rf ${build_dir}/gdb/gdbserver
-mkdir -p ${build_dir}/gdb/gdbserver
-cd ${build_dir}/gdb/gdbserver
+rm -rf ${build_dir_gdb}/gdb/gdbserver
+mkdir -p ${build_dir_gdb}/gdb/gdbserver
+cd ${build_dir_gdb}/gdb/gdbserver
 
-config_path=$(calcConfigPath "${unified_src_abs}")/gdb/gdbserver
+config_path=$(calcConfigPath "${gdb_dir}")/gdb/gdbserver
 if "${config_path}"/configure \
         --with-pkgversion="${version_str}"\
-        --with-bugurl="${bugurl_str}" \
+        --with-bugurl="${bugurl_str}" --with-endian=${ARC_ENDIAN} \
         --host=${arche}-linux-uclibc >> "${logfile}" 2>> "${logfile}"
 then
     echo "  finished configuring gdbserver"
@@ -481,7 +504,8 @@ else
 fi
 
 export CC=${arche}-linux-uclibc-gcc
-if make ${PARALLEL} CFLAGS="${CFLAGS} -static -fcommon -mno-sdata" \
+if make ${PARALLEL} \
+    CFLAGS="${CFLAGS} -static -fcommon -mno-sdata -DARC_LEGACY_PTRACE_ABI" \
     >> "${logfile}" 2>&1
 then
     echo "  finished building GDBSERVER to run on an arc"

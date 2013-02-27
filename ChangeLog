@@ -1,3 +1,14 @@
+2013-02-27  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
+	* arc-versions.sh: Build with 4.4 components apart from GDB.
+	* build-elf32.sh: Build with 4.4 components and no GDB.
+	* build-linux.sh: Build with 4.4 tool chain.
+	* build-uclibc.sh: Add ARC_LEGACY_PTRACE_ABI defintion when
+	building gdbserver. Build 4.4 tool chain with GDB 7.5.1 (from 4.8
+	tool chain).
+	* run-tests.sh: Only run uClibc tests.
+	* run-uclibc-tests.sh: Only run GDB tests.
+
 2013-02-26  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
 	* arc-versions.sh: Optionally do a fetch first, to deal with new

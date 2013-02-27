@@ -179,14 +179,14 @@ export ARC_TEST_TARGET
 status=0
 
 # Run the ELF32 tests
-if [ "${elf32}" = "--elf32" ]
-then
-    if ! "${ARC_GNU}"/toolchain/run-elf32-tests.sh
-    then
-        echo "ERROR: arc-elf32- tests failed to run."
-        status=1
-    fi
-fi
+# if [ "${elf32}" = "--elf32" ]
+# then
+#     if ! "${ARC_GNU}"/toolchain/run-elf32-tests.sh
+#     then
+#         echo "ERROR: arc-elf32- tests failed to run."
+#         status=1
+#     fi
+# fi
 
 # Run the UCLIBC tests
 if [ "${uclibc}" = "--uclibc" ]
