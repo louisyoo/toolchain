@@ -63,7 +63,7 @@ proc telnet_failure_check { connhost errmess } {
     if [board_info $connhost exists max_failure_count] {
 	set max_fc [board_info $connhost max_failure_count]
     }
-    verbose "telnet_failure_check: Max failure count $max_fc"
+    verbose "telnet_failure_check: Max failure count $max_fc for $errmess"
 
     # Increment the current failure count
     set fc 1
