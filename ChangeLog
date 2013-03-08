@@ -1,3 +1,7 @@
+2013-03-08  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
+	* build-linux.sh: Turn off ARC_MMU_SASID and ARC_CMN_MMAP by default.
+
 2013-02-27  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
 	* build-all.sh (UNISRC): Updated.
