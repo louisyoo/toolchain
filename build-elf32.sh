@@ -71,10 +71,18 @@
 # ------------------------------------------------------------------------------
 # Local variables. We need to use unified_src as a relative directory when
 # constructing.
-arch=arc
+if [ "${ARC_ENDIAN}" = "big" ]
+then
+    arch=arceb
+    build_dir="$(echo "${PWD}")"/bd-4.4-elf32eb
+    build_dir_gdb="$(echo "${PWD}")"/bd-4.8-elf32eb-gdb
+else
+    arch=arc
+    build_dir="$(echo "${PWD}")"/bd-4.4-elf32
+    build_dir_gdb="$(echo "${PWD}")"/bd-4.8-elf32-gdb
+fi
+
 unified_src_abs="$(echo "${PWD}")"/${UNISRC}
-build_dir="$(echo "${PWD}")"/bd-4.4-elf32
-build_dir_gdb="$(echo "${PWD}")"/bd-4.4-elf32-gdb
 
 # parse options
 until
@@ -135,6 +143,7 @@ if "${config_path}"/configure --target=${arch}-elf32 --with-cpu=arc700 \
         --enable-fast-install=N/A \
         --enable-languages=c,c++ --prefix=${INSTALLDIR} \
         --with-headers="${config_path}"/newlib/libc/include \
+        --enable-sim-endian=no \
     >> "${log_path}" 2>&1
 then
     echo "  finished configuring tools"
