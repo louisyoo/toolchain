@@ -1,3 +1,14 @@
+2013-03-15  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
+	* dejagnu/telnet-extra.exp: Improve commenting throughout
+	(telnet_close): Ensure we have a spawn_id for actions, unset
+	spawn_id on close, declare spawn_id global.
+	(telnet_exec): Clearer handling of names and args, declare
+	spawn_id global.
+	(telnet_spawn_open): New proc, declare spawn_id global.
+	(telnet_spawn): Rewritten to use its own spawn_id, independent of
+	telnet_exec, declare spawn_id global.
+
 2013-03-08  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
 	* dejagnu/baseboards/arc-linux-generic.exp: Set up to read a
