@@ -95,10 +95,11 @@ proc ftp_upload {host localfile remotefile} {
 proc make_relative {filename} {
 
     set cwd [pwd]
+    send_user "Making $filename relative to $cwd\n"
     verbose "Making $filename relative to $cwd" 2
 
     # Find common parent directory
-    set prefx $cwd
+    set prefix $cwd
     set upsteps ""
 
     while {0 != [string first $prefix $filename]} {
@@ -107,9 +108,11 @@ proc make_relative {filename} {
     }
 
     if {0 == [string length $prefix]} {
+	send_user "No common file prefix found\n"
 	verbose "No common file prefix found" 2
 	return $filename
     } else {
+	send_user "common prefix is $prefix, relative to CWD by $upsteps\n"
 	verbose "common prefix is $prefix, relative to CWD by $upsteps" 2
     }
 
@@ -137,7 +140,14 @@ proc ftp_download {host localfile remotefile} {
 
     # Make our localfile relative to our current working directory
     # set new_localfile [make_relative $localfile]
-    # verbose "new localfile is $new_localfile"
+    # verbose "ftp_download: new localfile is $new_localfile"
+
+    # For now just give up with very long files. We pretend to have succeeded
+    # to avoid issues with forever retrying.
+    if {[string length $remotefile] > 75} {
+	send_user "remote file $remotefile too long for ftp_download\n"
+	return $remotefile
+    }
 
     set prompt "ftp>"
 

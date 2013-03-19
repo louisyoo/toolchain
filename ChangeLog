@@ -1,3 +1,8 @@
+2013-03-19  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
+	* dejagnu/ftp-extra.exp (ftp_download): Silently ignore requests
+	for files > 75 chars long.
+
 2013-03-15  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
 	* dejagnu/telnet-extra.exp: Improve commenting throughout
