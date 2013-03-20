@@ -188,70 +188,65 @@ else
     exit 1
 fi
 
-# No GDB at present...
-
 # Configure GDB. We have to do this separately, because its binutils libraries
 # are incompatible.
 # TODO: should fix warnings instead of using --disable-werror.
-# echo "Configuring GDB" >> "${log_path}"
-# echo "===============" >> "${log_path}"
+echo "Configuring GDB" >> "${log_path}"
+echo "===============" >> "${log_path}"
 
 # echo "Configuring GDB ..."
 
 # Create the build dir
-# build_path=$(calcConfigPath "${build_dir_gdb}")
-# mkdir -p "${build_path}"
-# cd "${build_path}"
+build_path=$(calcConfigPath "${build_dir_gdb}")
+mkdir -p "${build_path}"
+cd "${build_path}"
 
 # Configure the build.
-# config_path=$(calcConfigPath "${gdb_dir}")
-# log_path=$(calcConfigPath "${logfile}")
-# if "${config_path}"/configure --target=${arch}-elf32 --with-cpu=arc700 \
-#         --disable-werror ${DISABLE_MULTILIB} \
-#         --with-pkgversion="ARCompact elf32 toolchain (built $(date +%Y%m%d))"  \
-#         --with-bugurl="http://solvnet.synopsys.com" \
-#         --enable-fast-install=N/A \
-#         --enable-languages=c,c++ --prefix=${INSTALLDIR} \
-#         --with-headers="${config_path}"/newlib/libc/include \
-#     >> "${log_path}" 2>&1
-# then
-#     echo "  finished configuring tools"
-# else
-#     echo "ERROR: configure failed."
-#     exit 1
-# fi
+config_path=$(calcConfigPath "${gdb_dir}")
+log_path=$(calcConfigPath "${logfile}")
+if "${config_path}"/configure --target=${arch}-elf32 --with-cpu=arc700 \
+        --disable-werror ${DISABLE_MULTILIB} \
+        --with-pkgversion="ARCompact elf32 toolchain (built $(date +%Y%m%d))"  \
+        --with-bugurl="http://solvnet.synopsys.com" \
+        --enable-fast-install=N/A \
+        --enable-languages=c,c++ --prefix=${INSTALLDIR} \
+        --with-headers="${config_path}"/newlib/libc/include \
+    >> "${log_path}" 2>&1
+then
+    echo "  finished configuring tools"
+else
+    echo "ERROR: configure failed."
+    exit 1
+fi
 
 # Build GDB
-# echo "Building GDB" >> "${log_path}"
-# echo "============" >> "${log_path}"
+echo "Building GDB" >> "${log_path}"
+echo "============" >> "${log_path}"
 
-# echo "Building GDB ..."
-# build_path=$(calcConfigPath "${build_dir_gdb}")
-# cd "${build_path}"
-# log_path=$(calcConfigPath "${logfile}")
-# if make ${PARALLEL} all-gdb all-sim >> "${log_path}" 2>&1
-# then
-#     echo "  finished building GDB"
-# else
-#     echo "ERROR: GDB build failed."
-#     exit 1
-# fi
+echo "Building GDB ..."
+build_path=$(calcConfigPath "${build_dir_gdb}")
+cd "${build_path}"
+log_path=$(calcConfigPath "${logfile}")
+if make ${PARALLEL} all-gdb all-sim >> "${log_path}" 2>&1
+then
+    echo "  finished building GDB"
+else
+    echo "ERROR: GDB build failed."
+    exit 1
+fi
 
 # Install GDB
-# echo "Installing GDB" >> "${log_path}"
-# echo "==============" >> "${log_path}"
+echo "Installing GDB" >> "${log_path}"
+echo "==============" >> "${log_path}"
 
-# echo "Installing GDB ..."
-# build_path=$(calcConfigPath "${build_dir_gdb}")
-# cd "${build_path}"
-# log_path=$(calcConfigPath "${logfile}")
-# if make install-gdb install-sim >> "${log_path}" 2>&1
-# then
-#     echo "  finished installing GDB"
-# else
-#     echo "ERROR: GDB install failed."
-#     exit 1
-# fi
+echo "Installing GDB ..."
+if make install-gdb install-sim >> "${log_path}" 2>&1
+then
+    echo "  finished installing GDB"
+else
+    echo "ERROR: GDB install failed."
+    exit 1
+fi
 
 echo "DONE  ELF32: $(date)" >> "${log_path}"
 echo "DONE  ELF32: $(date)"

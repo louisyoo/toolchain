@@ -1,3 +1,7 @@
+2013-03-20  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
+	* build-elf32.sh: Build GDB.
+
 2013-03-19  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
 	* dejagnu/ftp-extra.exp (ftp_download): Silently ignore requests
