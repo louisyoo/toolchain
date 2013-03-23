@@ -52,7 +52,6 @@ export DEJAGNU=${ARC_GNU}/toolchain/site.exp
 echo "Running elf32 tests"
 
 # Set the build directories
-bd_elf_gdb=${ARC_GNU}/bd-elf32-gdb
 
 # Create the ELF log file and results directory
 logfile_elf="$(echo "${ARC_GNU}")/logs/elf32-check-$(date -u +%F-%H%M).log"
@@ -65,10 +64,12 @@ mkdir ${res_elf}
 if [ "${ARC_ENDIAN}" = "little" ]
 then
     target_dir=arc-elf32
-    bd_elf=${ARC_GNU}/bd-4.8-elf32
+    bd_elf=${ARC_GNU}/bd-4.4-elf32
+    bd_elf_gdb=${ARC_GNU}/bd-4.8-elf32-gdb
 else
     target_dir=arceb-elf32
-    bd_elf=${ARC_GNU}/bd-4.8-elf32eb
+    bd_elf=${ARC_GNU}/bd-4.8-elf32eb-gdb
+    bd_elf_gdb=${ARC_GNU}/bd-4.8-elf32eb-gdb
 fi
 
 # The target board to use
@@ -76,37 +77,37 @@ board=arc-sim
 
 # Run the tests
 status=0
-run_check ${bd_elf}     binutils            "${logfile_elf}" ${board} \
-    || status=1
-save_res  ${bd_elf}     ${res_elf} binutils/binutils     "${logfile_elf}" \
-    || status=1
-run_check ${bd_elf}     gas                 "${logfile_elf}" ${board} \
-    || status=1
-save_res  ${bd_elf}     ${res_elf} gas/testsuite/gas     "${logfile_elf}" \
-    || status=1
-run_check ${bd_elf}     ld                  "${logfile_elf}" ${board} \
-    || status=1
-save_res  ${bd_elf}     ${res_elf} ld/ld                 "${logfile_elf}" \
-    || status=1
-run_check ${bd_elf}     gcc                 "${logfile_elf}" ${board} \
-    || status=1
-save_res  ${bd_elf}     ${res_elf} gcc/testsuite/gcc/gcc "${logfile_elf}" \
-    || status=1
-echo "Testing g++..."
-save_res  ${bd_elf}     ${res_elf} gcc/testsuite/g++/g++ "${logfile_elf}" \
-    || status=1
+# run_check ${bd_elf}     binutils            "${logfile_elf}" ${board} \
+#     || status=1
+# save_res  ${bd_elf}     ${res_elf} binutils/binutils     "${logfile_elf}" \
+#     || status=1
+# run_check ${bd_elf}     gas                 "${logfile_elf}" ${board} \
+#     || status=1
+# save_res  ${bd_elf}     ${res_elf} gas/testsuite/gas     "${logfile_elf}" \
+#     || status=1
+# run_check ${bd_elf}     ld                  "${logfile_elf}" ${board} \
+#     || status=1
+# save_res  ${bd_elf}     ${res_elf} ld/ld                 "${logfile_elf}" \
+#     || status=1
+# run_check ${bd_elf}     gcc                 "${logfile_elf}" ${board} \
+#     || status=1
+# save_res  ${bd_elf}     ${res_elf} gcc/testsuite/gcc/gcc "${logfile_elf}" \
+#     || status=1
+# echo "Testing g++..."
+# save_res  ${bd_elf}     ${res_elf} gcc/testsuite/g++/g++ "${logfile_elf}" \
+#     || status=1
 # libgcc and libgloss tests are currently empty, so nothing to run or save.
 # run_check ${bd_elf}     target-libgcc       "${logfile_elf}"
 # run_check ${bd_elf}     target-libgloss     "${logfile_elf}"
-run_check ${bd_elf}     target-newlib       "${logfile_elf}" ${board} \
-    || status=1
-save_res  ${bd_elf}     ${res_elf} ${target_dir}/newlib/testsuite/newlib \
-    "${logfile_elf}" || status=1
-run_check ${bd_elf}     target-libstdc++-v3 "${logfile_elf}" ${board} \
-    || status=1
-save_res  ${bd_elf}     ${res_elf} \
-    ${target_dir}/libstdc++-v3/testsuite/libstdc++ "${logfile_elf}" \
-    || status=1
+# run_check ${bd_elf}     target-newlib       "${logfile_elf}" ${board} \
+#     || status=1
+# save_res  ${bd_elf}     ${res_elf} ${target_dir}/newlib/testsuite/newlib \
+#     "${logfile_elf}" || status=1
+# run_check ${bd_elf}     target-libstdc++-v3 "${logfile_elf}" ${board} \
+#     || status=1
+# save_res  ${bd_elf}     ${res_elf} \
+#     ${target_dir}/libstdc++-v3/testsuite/libstdc++ "${logfile_elf}" \
+#     || status=1
 run_check ${bd_elf_gdb} sim                 "${logfile_elf}" ${board} \
     || status=1
 save_res  ${bd_elf_gdb} ${res_elf} sim/testsuite/sim     "${logfile_elf}" \

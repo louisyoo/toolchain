@@ -1,5 +1,11 @@
 2013-03-20  Jeremy Bennett <jeremy.bennett@embecosm.com>
 
+	* dejagnu/baseboards/arc-sim-base.exp: Use installed gcc.
+	* run-tests.sh: Enable ELF32 tests
+	* run-elf32-tests.sh: Update to just test GDB.
+
+2013-03-20  Jeremy Bennett <jeremy.bennett@embecosm.com>
+
 	* build-elf32.sh: Build GDB.
 
 2013-03-19  Jeremy Bennett <jeremy.bennett@embecosm.com>
